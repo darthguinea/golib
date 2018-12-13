@@ -22,11 +22,11 @@ func SetLevel(level int) {
 }
 
 func Fprintf(w io.Writer, format string, a ...interface{}) (n int, err error) {
-	return fmt.Fprintf(w, format, a)
+	return fmt.Fprintf(w, format, a...)
 }
 
 func Sprintf(format string, a ...interface{}) string {
-	return fmt.Sprintf(format, a)
+	return fmt.Sprintf(format, a...)
 }
 
 func Print(format string, a ...interface{}) (n int, err error) {
