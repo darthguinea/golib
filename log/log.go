@@ -21,8 +21,12 @@ func SetLevel(level int) {
 	logLevel = level
 }
 
-func Fprintf(w io.Writer, format string, a ...interface{}) {
-	fmt.Fprintf(w, format, a)
+func Fprintf(w io.Writer, format string, a ...interface{}) (n int, err error) {
+	return fmt.Fprintf(w, format, a)
+}
+
+func Sprintf(format string, a ...interface{}) string {
+	return fmt.Sprintf(format, a)
 }
 
 func Print(format string, a ...interface{}) (n int, err error) {
