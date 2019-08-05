@@ -41,3 +41,17 @@ func Load(v interface{}, path *string) error {
 
 	return err
 }
+
+// ExpandPath - If the path is ~, this function will
+// expand it to its full form (/home/<user>)
+func ExpandPath(path *string) {
+	usr, _ := user.Current()
+	dir := usr.HomeDir
+
+	if strings.Compare(*path, "~") == 0 {
+		*path = dir
+	} else if strings.HasPrefix(*path, "~/") {
+		pathPtr := *path
+		*path = filepath.Join(dir, pathPtr[1:])
+	}
+}
