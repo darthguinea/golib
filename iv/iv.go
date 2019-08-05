@@ -6,6 +6,9 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"os/user"
+	"path/filepath"
+	"strings"
 )
 
 // Marshal is a function that marshals the object into an
