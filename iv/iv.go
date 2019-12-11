@@ -7,8 +7,11 @@ import (
 	"io/ioutil"
 	"os"
 	"os/user"
+	"path"
 	"path/filepath"
 	"strings"
+
+	"github.com/darthguinea/golib/log"
 )
 
 // Marshal is a function that marshals the object into an
@@ -57,4 +60,16 @@ func ExpandPath(path *string) {
 		pathPtr := *path
 		*path = filepath.Join(dir, pathPtr[1:])
 	}
+}
+
+// CWD - Get the current binary location for this application
+// i.e. /usr/local/bin
+func CWD() string {
+	ex, err := os.Executable()
+	if err != nil {
+		log.Fatal(err)
+	}
+	dir := path.Dir(ex)
+	log.Info("My location [%v]", dir)
+	return dir
 }
