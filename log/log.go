@@ -7,7 +7,10 @@ import (
 	"time"
 )
 
-var logLevel int
+var (
+	logLevel  int
+	logFormat string
+)
 
 const (
 	OFF   = 0
@@ -19,6 +22,7 @@ const (
 
 func SetLevel(level int) {
 	logLevel = level
+	logFormat = "2006-01-02 15:04:05"
 }
 
 func Fprintf(w io.Writer, format string, a ...interface{}) (n int, err error) {
@@ -36,7 +40,7 @@ func Print(format string, a ...interface{}) (n int, err error) {
 func Info(format string, a ...interface{}) (n int, err error) {
 	if logLevel > OFF {
 		t := time.Now()
-		value := "[" + t.Format("2006-01-02 15:04:05") + "] [INFO ] " + format + "\n"
+		value := "[" + t.Format(logFormat) + "] [INFO ] " + format + "\n"
 		return fmt.Fprintf(os.Stdout, value, a...)
 	}
 	return 0, nil
@@ -44,14 +48,23 @@ func Info(format string, a ...interface{}) (n int, err error) {
 
 func Error(format string, a ...interface{}) (n int, err error) {
 	t := time.Now()
-	value := "[" + t.Format("2006-01-02 15:04:05") + "] [ERROR] " + format + "\n"
+	value := "[" + t.Format(logFormat) + "] [ERROR] " + format + "\n"
 	return fmt.Fprintf(os.Stdout, value, a...)
+}
+
+func Errors(v ...interface{}) (n int, err error) {
+	if logLevel > OFF {
+		t := time.Now()
+		value := "[" + t.Format(logFormat) + "] [ERROR] " + fmt.Sprintln(v...)
+		return fmt.Fprintf(os.Stderr, value)
+	}
+	return 0, nil
 }
 
 func Warn(format string, a ...interface{}) (n int, err error) {
 	if logLevel >= WARN {
 		t := time.Now()
-		value := "[" + t.Format("2006-01-02 15:04:05") + "] [WARN ] " + format + "\n"
+		value := "[" + t.Format(logFormat) + "] [WARN ] " + format + "\n"
 		return fmt.Fprintf(os.Stderr, value, a...)
 	}
 	return 0, nil
@@ -59,14 +72,14 @@ func Warn(format string, a ...interface{}) (n int, err error) {
 
 func Fatal(v ...interface{}) {
 	t := time.Now()
-	value := "[" + t.Format("2006-01-02 15:04:05") + "] [FATAL] " + fmt.Sprintln(v...)
+	value := "[" + t.Format(logFormat) + "] [FATAL] " + fmt.Sprintln(v...)
 	fmt.Printf(value)
 }
 
 func Debug(format string, a ...interface{}) (n int, err error) {
 	if logLevel >= DEBUG {
 		t := time.Now()
-		value := "[" + t.Format("2006-01-02 15:04:05") + "] [DEBUG] " + format + "\n"
+		value := "[" + t.Format(logFormat) + "] [DEBUG] " + format + "\n"
 		return fmt.Fprintf(os.Stderr, value, a...)
 	}
 	return 0, nil
