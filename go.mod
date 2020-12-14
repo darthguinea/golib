@@ -1,3 +1,3 @@
-module golib/v1.1
+module golib
 
 go 1.15
